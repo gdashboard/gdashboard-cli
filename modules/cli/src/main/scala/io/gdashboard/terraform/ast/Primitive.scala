@@ -35,7 +35,7 @@ object Primitive {
   }
 
   final case class Arr(value: List[Primitive]) extends Primitive {
-    def asString: String = value.map(_.asString).mkString("[", ",", "]")
+    def asString: String = value.map(_.asString).mkString("[", ", ", "]")
   }
 
   private def quote(string: String): String =

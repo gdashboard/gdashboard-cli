@@ -32,7 +32,7 @@ object Gauge {
     .addOpt("options", _.options)
     .build
 
-  implicit val timeseriesSchema: Schema.DataSource[Gauge] = Schema
+  implicit val gaugeSchema: Schema.DataSource[Gauge] = Schema
     .dataSource[Gauge]("gauge")
     .add("title", _.title)
     .addOpt("description", _.description)

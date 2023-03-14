@@ -36,7 +36,7 @@ object Stat {
     .addOpt("options", _.options)
     .build
 
-  implicit val timeseriesSchema: Schema.DataSource[Stat] = Schema
+  implicit val statSchema: Schema.DataSource[Stat] = Schema
     .dataSource[Stat]("stat")
     .add("title", _.title)
     .addOpt("description", _.description)
