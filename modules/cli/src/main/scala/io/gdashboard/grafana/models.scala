@@ -141,6 +141,8 @@ final case class Options(
     graphMode: Option[String],
     justifyMode: Option[String],
     displayMode: Option[String],
+    showThresholdLabels: Option[Boolean],
+    showThresholdMarkers: Option[Boolean],
     content: Option[String],
     mode: Option[String],
     text: Option[TextSize],
