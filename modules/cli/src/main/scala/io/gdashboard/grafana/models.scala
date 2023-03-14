@@ -1,8 +1,6 @@
 package io.gdashboard.grafana
 
-final case class TemplatesList(
-    list: Seq[Templating]
-)
+import io.circe.Json
 
 final case class Color(
     mode: Option[String],
@@ -111,6 +109,10 @@ final case class Link(
     url: Option[String]
 )
 
+final case class TemplatesList(
+    list: Seq[Templating]
+)
+
 final case class Templating(
     current: Option[Current],
     hide: Option[Int],
@@ -119,7 +121,7 @@ final case class Templating(
     multi: Option[Boolean],
     name: Option[String],
     options: Seq[Current],
-    query: Option[String],
+    query: Option[Json],
     refresh: Option[Int],
     regex: Option[String],
     skipUrlSync: Option[Boolean],
@@ -189,7 +191,7 @@ final case class Dashboard(
     refresh: Option[Boolean],
     style: Option[String],
     tags: Seq[String],
-    //     templating: Option[TemplatesList],
+    templating: Option[TemplatesList],
     time: Option[Time],
     timepicker: Option[Timepicker],
     timezone: Option[String],

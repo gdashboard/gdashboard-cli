@@ -62,7 +62,7 @@ object Mapping {
 
   implicit val mappingSchema: Schema.Block[Mapping] =
     new Schema.Block[Mapping] {
-      def toElement(mapping: Mapping): Element.Block =
+      def toElement(mapping: Mapping): Element =
         mapping match {
           case range: Range     => Schema.Block[Range].toElement(range)
           case regex: Regex     => Schema.Block[Regex].toElement(regex)
@@ -76,14 +76,6 @@ object Mapping {
           case regex: Regex     => Schema.Block[Regex].toElement(name, regex)
           case special: Special => Schema.Block[Special].toElement(name, special)
           case value: Value     => Schema.Block[Value].toElement(name, value)
-        }
-
-      def elements(mapping: Mapping): List[Element] =
-        mapping match {
-          case range: Range     => Schema.Block[Range].elements(range)
-          case regex: Regex     => Schema.Block[Regex].elements(regex)
-          case special: Special => Schema.Block[Special].elements(special)
-          case value: Value     => Schema.Block[Value].elements(value)
         }
     }
 

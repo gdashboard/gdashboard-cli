@@ -44,7 +44,7 @@ object FieldOverride {
 
   implicit val fieldOverrideSchema: Schema.Block[FieldOverride] =
     new Schema.Block[FieldOverride] {
-      def toElement(field: FieldOverride): Element.Block =
+      def toElement(field: FieldOverride): Element =
         field match {
           case byName: ByName       => Schema.Block[ByName].toElement(byName)
           case byRegex: ByRegex     => Schema.Block[ByRegex].toElement(byRegex)
@@ -60,15 +60,6 @@ object FieldOverride {
           case byType: ByType       => Schema.Block[ByType].toElement(name, byType)
           case byQueryId: ByQueryId => Schema.Block[ByQueryId].toElement(name, byQueryId)
           case unknown: Unknown     => Schema.Block[Unknown].toElement(name, unknown)
-        }
-
-      def elements(field: FieldOverride): List[Element] =
-        field match {
-          case byName: ByName       => Schema.Block[ByName].elements(byName)
-          case byRegex: ByRegex     => Schema.Block[ByRegex].elements(byRegex)
-          case byType: ByType       => Schema.Block[ByType].elements(byType)
-          case byQueryId: ByQueryId => Schema.Block[ByQueryId].elements(byQueryId)
-          case unknown: Unknown     => Schema.Block[Unknown].elements(unknown)
         }
     }
 }

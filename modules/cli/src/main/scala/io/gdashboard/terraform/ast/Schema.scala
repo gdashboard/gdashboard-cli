@@ -9,8 +9,7 @@ object Schema {
   def apply[A](implicit ev: Schema[A]): Schema[A] = ev
 
   trait Block[A] extends Schema[A] {
-    def toElement(a: A): Element.Block
-    def elements(a: A): List[Element]
+    def toElement(a: A): Element
   }
 
   object Block {
@@ -32,6 +31,12 @@ object Schema {
         fields :+ ((a: A) => List(Schema[B].toElement(name, focus(a))))
       ) {}
 
+    def add[B: Schema.Block](focus: A => B): BlockSchemaBuilder[A] =
+      new BlockSchemaBuilder[A](
+        blockName,
+        fields :+ ((a: A) => List(Schema.Block[B].toElement(focus(a))))
+      ) {}
+
     def addOpt[B: Schema](name: String, focus: A => Option[B]): BlockSchemaBuilder[A] =
       new BlockSchemaBuilder[A](
         blockName,
@@ -45,9 +50,6 @@ object Schema {
 
         def toElement(name: String, a: A): Element.Block =
           Element.Block(name, fields.flatMap(_.apply(a)))
-
-        def elements(a: A): List[Element] =
-          fields.flatMap(_.apply(a))
       }
   }
 
@@ -97,4 +99,7 @@ object Schema {
 
   def listInlineBlockSchema[A: Schema.Block]: Schema[List[A]] =
     (_, list) => Element.InlineBlock(list.map(Schema.Block[A].toElement))
+
+  val rawStringSchema: Schema[String] =
+    (name, str) => Element.Attribute(name, Primitive.RawStr(str))
 }

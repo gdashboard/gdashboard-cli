@@ -22,6 +22,10 @@ object Primitive {
     def asString: String = quote(value)
   }
 
+  final case class RawStr(value: String) extends Primitive {
+    def asString: String = value
+  }
+
   final case class Int32(value: Int) extends Primitive {
     def asString: String = value.toString
   }

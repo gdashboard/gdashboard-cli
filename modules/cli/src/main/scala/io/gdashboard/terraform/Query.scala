@@ -45,7 +45,7 @@ object Query {
 
   implicit val querySchema: Schema.Block[Query] =
     new Schema.Block[Query] {
-      def toElement(query: Query): Element.Block =
+      def toElement(query: Query): Element =
         query match {
           case prometheus: Prometheus => Schema.Block[Prometheus].toElement(prometheus)
           case unknown: Unknown       => Schema.Block[Unknown].toElement(unknown)
@@ -55,12 +55,6 @@ object Query {
         query match {
           case prometheus: Prometheus => Schema[Prometheus].toElement(name, prometheus)
           case unknown: Unknown       => Schema[Unknown].toElement(s"$name - ${unknown.tpe}", unknown)
-        }
-
-      def elements(query: Query): List[Element] =
-        query match {
-          case prometheus: Prometheus => Schema.Block[Prometheus].elements(prometheus)
-          case unknown: Unknown       => Schema.Block[Unknown].elements(unknown)
         }
     }
 
