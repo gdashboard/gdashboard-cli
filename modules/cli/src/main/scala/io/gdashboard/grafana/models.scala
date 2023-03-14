@@ -16,6 +16,18 @@ final case class Current(
     value: Option[String]
 )
 
+case class ReduceOptions(
+    values: Option[Boolean],
+    fields: Option[String],
+    calcs: Seq[String],
+    limit: Option[Int]
+)
+
+case class TextSize(
+    titleSize: Option[Int],
+    valueSize: Option[Int]
+)
+
 final case class Custom(
     axisCenteredZero: Option[Boolean],
     axisColorMode: Option[String],
@@ -99,19 +111,6 @@ final case class Link(
     url: Option[String]
 )
 
-final case class List0(
-    `$$hashKey`: String,
-    builtIn: Option[Int],
-    datasource: Datasource,
-    enable: Boolean,
-    hide: Option[Boolean],
-    iconColor: String,
-    name: String,
-    target: Option[Target],
-    `type`: Option[String],
-    expr: Option[String]
-)
-
 final case class Templating(
     current: Option[Current],
     hide: Option[Int],
@@ -135,16 +134,26 @@ final case class Templating(
 
 final case class Options(
     legend: Option[Legend],
-    tooltip: Option[Tooltip]
+    tooltip: Option[Tooltip],
+    orientation: Option[String],
+    textMode: Option[String],
+    colorMode: Option[String],
+    graphMode: Option[String],
+    justifyMode: Option[String],
+    displayMode: Option[String],
+    content: Option[String],
+    mode: Option[String],
+    text: Option[TextSize],
+    reduceOptions: Option[ReduceOptions]
 )
 
-final case class Panels(
+final case class Panel(
     collapsed: Option[Boolean],
     datasource: Datasource,
     gridPos: GridPos,
     id: Option[Int],
-    panels: Option[Seq[Panels]],
-    targets: Option[Seq[Targets]],
+    panels: Option[Seq[Panel]],
+    targets: Option[Seq[Target]],
     title: Option[String],
     `type`: String,
     description: Option[String],
@@ -174,7 +183,7 @@ final case class Dashboard(
     id: Option[String],
     links: Seq[Link],
     liveNow: Option[Boolean],
-    panels: Seq[Panels],
+    panels: Seq[Panel],
     refresh: Option[Boolean],
     style: Option[String],
     tags: Seq[String],
@@ -207,14 +216,6 @@ final case class Steps(
 final case class Datasource(`type`: Option[String], uid: Option[String])
 
 final case class Target(
-    limit: Option[Int],
-    matchAny: Option[Boolean],
-    tags: Option[Seq[String]],
-    `type`: Option[String]
-)
-
-// todo make sealed trait
-final case class Targets(
     datasource: Option[Datasource],
     refId: Option[String],
     expr: Option[String],

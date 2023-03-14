@@ -38,7 +38,7 @@ object Element {
       case Element.InlineBlock(children) if children.nonEmpty =>
         children.foldLeft(builder)((builder, element) => render(element, builder, offset))
 
-      case Element.InlineBlock(children) =>
+      case Element.InlineBlock(_) =>
         builder
 
       case Element.Block(name, children) if children.nonEmpty =>
