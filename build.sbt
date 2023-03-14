@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.2.0"
+ThisBuild / scalaVersion := "2.13.10"
 
 lazy val binariesMatrix = Map(
   "ubuntu-latest" -> "gdashboard-cli-linux-x84_64",
@@ -11,7 +11,6 @@ ThisBuild / githubWorkflowTargetTags           ++= Seq("v*")
 ThisBuild / githubWorkflowPublish               := Nil
 ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
-
 ThisBuild / githubWorkflowBuildPostamble ++=
   binariesMatrix.toSeq.flatMap { case (os, binaryName) =>
     val condition = s"startsWith(github.ref, 'refs/tags/v') && matrix.os == '$os'"
@@ -23,9 +22,9 @@ ThisBuild / githubWorkflowBuildPostamble ++=
       ),
       WorkflowStep.Use(
         UseRef.Public("softprops", "action-gh-release", "v1"),
-        name   = Some(s"Upload $binaryName"),
+        name = Some(s"Upload $binaryName"),
         params = Map("files" -> binaryName),
-	cond   = Some(condition)
+        cond = Some(condition)
       )
     )
   }
@@ -42,9 +41,13 @@ lazy val cli = crossProject(JVMPlatform, NativePlatform)
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-effect"    % "3.4.8",
-      "com.monovore"  %%% "decline-effect" % "2.4.1"
+      "com.monovore"  %%% "decline-effect" % "2.4.1",
+      "io.circe"      %%% "circe-core"     % "0.14.5",
+      "io.circe"      %%% "circe-generic"  % "0.14.5",
+      "io.circe"      %%% "circe-parser"   % "0.14.5",
+      "io.scalaland"  %%% "chimney"        % "0.7.1"
     )
-  )  
+  )
 
 lazy val generateBinarySettings = {
   val generateNativeBinary = inputKey[Unit]("Generate native binary")
@@ -62,4 +65,3 @@ lazy val generateBinarySettings = {
     }
   )
 }
-
