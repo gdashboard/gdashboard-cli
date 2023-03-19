@@ -74,7 +74,7 @@ object Generator {
           collapsed = Option.when(section.collapsible && section.collapsed)(section.collapsed),
           panels = section.inner.map { panel =>
             val size = panel.panel.gridPos.w.zip(panel.panel.gridPos.h) match {
-              case Some((width, height)) => terraform.datasource.Dashboard.Size.Ref(width, height, "local.size")
+              case Some((width, height)) => terraform.datasource.Dashboard.Size.Ref(height, width, "local.size")
               case None                  => terraform.datasource.Dashboard.Size.Ref(4, 4, "local.size")
             }
 
