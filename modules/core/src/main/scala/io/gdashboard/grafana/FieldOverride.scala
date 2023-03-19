@@ -4,7 +4,7 @@ import io.circe.Json
 
 final case class FieldOverride(
     matcher: Option[FieldOverride.Matcher],
-    properties: Option[Seq[FieldOverride.Property]]
+    properties: Option[List[FieldOverride.Property]]
 )
 
 object FieldOverride {

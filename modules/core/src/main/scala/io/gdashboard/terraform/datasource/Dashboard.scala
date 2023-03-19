@@ -39,20 +39,24 @@ object Dashboard {
   final case class Section(
       title: Option[String],
       collapsed: Option[Boolean],
-      panels: List[Panel],
-      rows: List[SectionRow]
-  )
-
-  final case class SectionRow(
       panels: List[Panel]
   )
 
+  final case class SectionRow(panels: List[Panel])
+
   final case class Panel(source: String, size: Size)
 
-  sealed trait Size
+  sealed trait Size {
+    def height: Int
+    def width: Int
+  }
 
   object Size {
-    final case class Ref(reference: String)         extends Size
+    final case class Ref(height: Int, width: Int, prefix: String) extends Size {
+      def varName: String   = s"_${width}_$height"
+      def reference: String = s"$prefix.$varName"
+    }
+
     final case class Fixed(height: Int, width: Int) extends Size
 
     implicit val refSizeSchema: Schema[Ref] =
@@ -113,7 +117,6 @@ object Dashboard {
     .addOpt("title", _.title)
     .addOpt("collapsed", _.collapsed)
     .add("panel", _.panels)(Schema.listInlineBlockSchema)
-    .add("rows", _.rows)(Schema.listInlineBlockSchema)
     .build
 
   implicit val layoutSchema: Schema.Block[Layout] = Schema

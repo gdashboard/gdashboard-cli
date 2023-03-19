@@ -73,7 +73,7 @@ object Conversions {
   implicit val fieldOverrideTransformer: Transformer[grafana.FieldOverride, terraform.FieldOverride] = {
     import io.circe.generic.auto._
 
-    def transformField(properties: Seq[grafana.FieldOverride.Property]): terraform.FieldOptions =
+    def transformField(properties: List[grafana.FieldOverride.Property]): terraform.FieldOptions =
       properties.foldLeft(terraform.FieldOptions(None, None, None, None, None, None, None, Nil)) {
         case (opts, grafana.FieldOverride.Property(Some("unit"), json)) =>
           opts.copy(unit = json.as[String].toOption)
@@ -95,7 +95,7 @@ object Conversions {
 
         case (opts, grafana.FieldOverride.Property(Some("mappings"), json)) =>
           opts.copy(mappings =
-            json.as[Seq[grafana.Mapping]].toOption.toList.flatMap(_.map(_.transformInto[terraform.Mapping]))
+            json.as[List[grafana.Mapping]].toOption.toList.flatMap(_.map(_.transformInto[terraform.Mapping]))
           )
 
         case (opts, grafana.FieldOverride.Property(Some("thresholds"), json)) =>

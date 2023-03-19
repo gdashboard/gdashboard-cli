@@ -1,5 +1,25 @@
 ThisBuild / scalaVersion := "2.13.10"
 
+ThisBuild / semanticdbEnabled          := true
+ThisBuild / semanticdbVersion          := scalafixSemanticdb.revision
+ThisBuild / scalafixScalaBinaryVersion := "2.13"
+
+inThisBuild(
+  Seq(
+    organization  := "io.github.irevive",
+    homepage      := Some(url("https://github.com/iRevive/gdashboard-cli")),
+    developers    := List(Developer("iRevive", "Maksym Ochenashko", "", url("https://github.com/iRevive"))),
+    versionScheme := Some("semver-spec")
+  )
+)
+
+ThisBuild / scalafixDependencies ++= Seq(
+  "com.github.liancheng" %% "organize-imports"               % "0.6.0",
+  "org.typelevel"        %% "typelevel-scalafix-cats"        % "0.1.5",
+  "org.typelevel"        %% "typelevel-scalafix-cats-effect" % "0.1.5",
+  "org.typelevel"        %% "typelevel-scalafix-fs2"         % "0.1.5"
+)
+
 lazy val binariesMatrix = Map(
   "ubuntu-latest" -> "gdashboard-cli-linux-x84_64",
   "macos-latest"  -> "gdashboard-cli-macos-x86_64"
@@ -32,25 +52,41 @@ ThisBuild / githubWorkflowBuildPostamble ++=
 lazy val root = project
   .in(file("."))
   .aggregate(core.jvm, core.native, cli.jvm, cli.native)
-  .settings(name := "gdashboard-cli")
+  .settings(name := "gdashboard")
   .settings(generateBinarySettings)
 
 lazy val cli = crossProject(JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("./modules/cli"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "gdashboard-cli",
+    libraryDependencies ++= Seq(
+      "com.monovore" %%% "decline-effect"      % "2.4.1",
+      "co.fs2"       %%% "fs2-io"              % "3.6.1",
+      "org.http4s"   %%% "http4s-ember-client" % "0.23.18",
+      "org.http4s"   %%% "http4s-circe"        % "0.23.18"
+    ),
+    buildInfoPackage := "io.gdashboard",
+    buildInfoOptions += sbtbuildinfo.BuildInfoOption.PackagePrivate,
+    buildInfoKeys    := Seq[BuildInfoKey](version)
+  )
+  .nativeSettings(
+    libraryDependencies += "com.armanbilge" %%% "epollcat" % "0.1.4" // tcp for fs2
+  )
   .dependsOn(core)
 
 lazy val core = crossProject(JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("./modules/core"))
   .settings(
+    name := "gdashboard-core",
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-effect"    % "3.4.8",
-      "com.monovore"  %%% "decline-effect" % "2.4.1",
-      "io.circe"      %%% "circe-core"     % "0.14.5",
-      "io.circe"      %%% "circe-generic"  % "0.14.5",
-      "io.circe"      %%% "circe-parser"   % "0.14.5",
-      "io.scalaland"  %%% "chimney"        % "0.7.1"
+      "org.typelevel" %%% "cats-effect"   % "3.4.8",
+      "io.circe"      %%% "circe-core"    % "0.14.5",
+      "io.circe"      %%% "circe-generic" % "0.14.5",
+      "io.circe"      %%% "circe-parser"  % "0.14.5",
+      "io.scalaland"  %%% "chimney"       % "0.7.1"
     )
   )
 

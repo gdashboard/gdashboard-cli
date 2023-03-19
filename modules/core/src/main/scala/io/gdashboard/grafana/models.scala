@@ -17,7 +17,7 @@ final case class Current(
 case class ReduceOptions(
     values: Option[Boolean],
     fields: Option[String],
-    calcs: Seq[String],
+    calcs: List[String],
     limit: Option[Int]
 )
 
@@ -52,8 +52,8 @@ final case class Custom(
 final case class FieldOptions(
     color: Option[Color],
     custom: Option[Custom],
-    links: Option[Seq[Link]],
-    mappings: Option[Seq[Mapping]],
+    links: Option[List[Link]],
+    mappings: Option[List[Mapping]],
     max: Option[Int],
     min: Option[Int],
     decimals: Option[Int],
@@ -64,7 +64,7 @@ final case class FieldOptions(
 
 final case class FieldConfig(
     defaults: Option[FieldOptions],
-    overrides: Option[Seq[FieldOverride]]
+    overrides: Option[List[FieldOverride]]
 )
 
 final case class GridPos(
@@ -90,7 +90,7 @@ final case class Inputs(
 )
 
 final case class Legend(
-    calcs: Option[Seq[String]],
+    calcs: Option[List[String]],
     displayMode: Option[String],
     placement: Option[String],
     showLegend: Option[Boolean]
@@ -102,7 +102,7 @@ final case class LineStyle(
 
 final case class Link(
     icon: Option[String],
-    tags: Option[Seq[String]],
+    tags: Option[List[String]],
     targetBlank: Option[Boolean],
     title: Option[String],
     `type`: Option[String],
@@ -110,7 +110,7 @@ final case class Link(
 )
 
 final case class TemplatesList(
-    list: Seq[Templating]
+    list: List[Templating]
 )
 
 final case class Templating(
@@ -121,7 +121,7 @@ final case class Templating(
     description: Option[String],
     multi: Option[Boolean],
     name: Option[String],
-    options: Seq[Current],
+    options: List[Current],
     query: Option[Json],
     refresh: Option[Int],
     regex: Option[String],
@@ -161,13 +161,13 @@ final case class Panel(
     datasource: Datasource,
     gridPos: GridPos,
     id: Option[Int],
-    panels: Option[Seq[Panel]],
-    targets: Option[Seq[Target]],
+    panels: Option[List[Panel]],
+    targets: Option[List[Target]],
     title: Option[String],
     `type`: String,
     description: Option[String],
     fieldConfig: Option[FieldConfig],
-    links: Option[Seq[String]],
+    links: Option[List[String]],
     options: Option[Options],
     pluginVersion: Option[String],
     hideTimeOverride: Option[Boolean],
@@ -182,20 +182,20 @@ final case class Requires(
 )
 
 final case class Dashboard(
-    __inputs: Seq[Inputs],
+    __inputs: List[Inputs],
     // __elements: Any,
-    // __requires: Seq[Requires],
+    // __requires: List[Requires],
     // annotations: Annotations,
     editable: Option[Boolean],
     // gnetId: Int,
     graphTooltip: Option[Int],
     id: Option[String],
-    links: Seq[Link],
+    links: List[Link],
     liveNow: Option[Boolean],
-    panels: Seq[Panel],
+    panels: List[Panel],
     refresh: Option[Boolean],
     style: Option[String],
-    tags: Seq[String],
+    tags: List[String],
     templating: Option[TemplatesList],
     time: Option[Time],
     timepicker: Option[Timepicker],
@@ -240,7 +240,7 @@ final case class Target(
 
 final case class Thresholds(
     mode: Option[String],
-    steps: Option[Seq[Steps]]
+    steps: Option[List[Steps]]
 )
 
 final case class Time(
@@ -251,8 +251,8 @@ final case class Time(
 final case class Timepicker(
     hidden: Option[Boolean],
     now_delay: Option[String],
-    refresh_intervals: Option[Seq[String]],
-    time_options: Option[Seq[String]]
+    refresh_intervals: Option[List[String]],
+    time_options: Option[List[String]]
 )
 
 final case class Tooltip(
