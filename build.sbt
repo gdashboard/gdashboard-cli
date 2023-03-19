@@ -31,13 +31,18 @@ ThisBuild / githubWorkflowBuildPostamble ++=
 
 lazy val root = project
   .in(file("."))
-  .aggregate(cli.jvm, cli.native)
+  .aggregate(core.jvm, core.native, cli.jvm, cli.native)
   .settings(name := "gdashboard-cli")
   .settings(generateBinarySettings)
 
 lazy val cli = crossProject(JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("./modules/cli"))
+  .dependsOn(core)
+
+lazy val core = crossProject(JVMPlatform, NativePlatform)
+  .crossType(CrossType.Pure)
+  .in(file("./modules/core"))
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-effect"    % "3.4.8",

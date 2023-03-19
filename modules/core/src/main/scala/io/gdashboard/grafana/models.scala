@@ -118,6 +118,7 @@ final case class Templating(
     hide: Option[Int],
     includeAll: Option[Boolean],
     label: Option[String],
+    description: Option[String],
     multi: Option[Boolean],
     name: Option[String],
     options: Seq[Current],
@@ -129,9 +130,13 @@ final case class Templating(
     datasource: Option[Datasource],
     definition: Option[String],
     sort: Option[Int],
+    allValue: Option[String],
     tagValuesQuery: Option[String],
     tagsQuery: Option[String],
-    useTags: Option[Boolean]
+    useTags: Option[Boolean],
+    auto: Option[Boolean],
+    autoCount: Option[Int],
+    autoMin: Option[String]
 )
 
 final case class Options(
@@ -196,6 +201,7 @@ final case class Dashboard(
     timepicker: Option[Timepicker],
     timezone: Option[String],
     title: Option[String],
+    description: Option[String],
     uid: Option[String],
     version: Option[Int],
     weekStart: Option[String]
@@ -243,6 +249,8 @@ final case class Time(
 )
 
 final case class Timepicker(
+    hidden: Option[Boolean],
+    now_delay: Option[String],
     refresh_intervals: Option[Seq[String]],
     time_options: Option[Seq[String]]
 )
