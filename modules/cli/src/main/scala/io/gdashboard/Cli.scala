@@ -108,7 +108,7 @@ object Cli extends CommandIOApp(
 
     NonEmptyList
       .of[Opts[Choice]](
-        Opts.subcommand("generate", "Parse questions and ensure they are up to the requirements")(
+        Opts.subcommand("generate", "Generate Terraform files from a Grafana dashboard")(
           generate
         )
       )

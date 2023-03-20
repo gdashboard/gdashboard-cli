@@ -7,7 +7,7 @@ Generate Terraform files from Grafana JSON dashboard for [gdashboard](https://re
 ```
 Usage: gdashboard-cli generate [--input <string>] [--dashboard-id <string>] [--group-by-sections] <The path to an output directory>
 
-Parse questions and ensure they are up to the requirements
+Generate Terraform files from a Grafana dashboard
 
 Options and flags:
     --help
