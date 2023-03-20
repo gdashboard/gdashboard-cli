@@ -25,7 +25,7 @@ Options and flags:
 
 ```shell
 $ sbt generateNativeBinary
-$ gdashboard generate --input ./input.json ./output
-$ gdashboard generate --dashboard-id 123 ./output
+$ gdashboard-cli generate --input ./input.json ./output
+$ gdashboard-cli generate --dashboard-id 123 ./output
 ```
 
