@@ -53,7 +53,7 @@ object Dashboard {
 
   object Size {
     final case class Ref(height: Int, width: Int, prefix: String) extends Size {
-      def varName: String   = s"_${width}_$height"
+      def varName: String   = s"_${width}x$height"
       def reference: String = s"$prefix.$varName"
     }
 

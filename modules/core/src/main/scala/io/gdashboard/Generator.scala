@@ -239,6 +239,19 @@ object Generator {
           )
         }
 
+      case "table" =>
+        Counters[F].nextTable.map { counter =>
+          val id = panel.title.map(sanitize).getOrElse(s"table_$counter")
+
+          Some(
+            GeneratedPanel(
+              panel,
+              s"data.gdashboard_table.$id.json",
+              Schema.DataSource[terraform.datasource.Table].toElement(id, makeTable(panel))
+            )
+          )
+        }
+
       case _ =>
         Console[F].println(s"Unknown panel type [${panel.`type`}]. Title [${panel.title}].").as(None)
     }
@@ -425,6 +438,55 @@ object Generator {
       description = panel.description,
       field = panel.fieldConfig.flatMap(_.defaults).map(_.transformInto[terraform.FieldOptions]),
       graph = panel.options.map(opts => makeGraph(opts)),
+      overrides = panel.fieldConfig.flatMap(_.overrides).toList.flatten.map(_.transformInto[terraform.FieldOverride]),
+      queries = panel.targets.getOrElse(Nil).map(_.transformInto[terraform.Query]),
+      transform = Nil
+    )
+  }
+
+  private def makeTable(panel: grafana.Panel): terraform.datasource.Table = {
+    def makeGraph(
+        options: Option[grafana.Options],
+        custom: Option[grafana.Custom]
+    ): Option[terraform.datasource.Table.Graph] =
+      Option.when(options.isDefined || custom.isDefined)(
+        terraform.datasource.Table.Graph(
+          cell = Option.when(custom.exists(c => c.displayMode.exists(_.nonEmpty) || c.inspect.contains(true)))(
+            terraform.datasource.Table.Cell(
+              custom.flatMap(_.displayMode),
+              custom.flatMap(_.inspect)
+            )
+          ),
+          column = Option.when(
+            custom.exists(c =>
+              c.align.exists(_.nonEmpty) || c.filterable.contains(true) || c.minWidth.nonEmpty || c.width.nonEmpty
+            )
+          )(
+            terraform.datasource.Table.Column(
+              custom.flatMap(_.align),
+              custom.flatMap(_.filterable),
+              minWidth = custom.flatMap(_.minWidth),
+              width = custom.flatMap(_.width)
+            )
+          ),
+          footer = options
+            .flatMap(_.footer)
+            .map(footer =>
+              terraform.datasource.Table.Footer(
+                calculations = footer.reducer.getOrElse(Nil),
+                fields = footer.fields.toList.flatMap(_.split(",").toList),
+                pagination = footer.enablePagination
+              )
+            ),
+          showHeader = options.flatMap(_.showHeader)
+        )
+      )
+
+    terraform.datasource.Table(
+      title = panel.title.getOrElse(""),
+      description = panel.description,
+      field = panel.fieldConfig.flatMap(_.defaults).map(_.transformInto[terraform.FieldOptions]),
+      graph = makeGraph(panel.options, panel.fieldConfig.flatMap(_.defaults).flatMap(_.custom)),
       overrides = panel.fieldConfig.flatMap(_.overrides).toList.flatten.map(_.transformInto[terraform.FieldOverride]),
       queries = panel.targets.getOrElse(Nil).map(_.transformInto[terraform.Query]),
       transform = Nil

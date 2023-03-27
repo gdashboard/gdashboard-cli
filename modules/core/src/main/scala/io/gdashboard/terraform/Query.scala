@@ -10,6 +10,7 @@ object Query {
       uid: Option[String],
       refId: Option[String],
       expr: Option[String],
+      format: Option[String],
       instant: Option[Boolean],
       minInterval: Option[String],
       legendFormat: Option[String]
@@ -30,6 +31,7 @@ object Query {
     .addOpt("uid", _.uid)
     .addOpt("ref_id", _.refId)
     .addOpt("expr", _.expr)
+    .addOpt("format", _.format)
     .addOpt("instant", _.instant)
     .addOpt("min_interval", _.minInterval)
     .addOpt("legend_format", _.legendFormat)

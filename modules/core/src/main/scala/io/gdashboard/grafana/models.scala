@@ -46,7 +46,14 @@ final case class Custom(
     showPoints: Option[String],
     spanNulls: Option[Boolean],
     stacking: Option[Stacking],
-    thresholdsStyle: Option[Color]
+    thresholdsStyle: Option[Color],
+    // table
+    align: Option[String],
+    displayMode: Option[String],
+    inspect: Option[Boolean],
+    filterable: Option[Boolean],
+    minWidth: Option[Int],
+    width: Option[Int]
 )
 
 final case class FieldOptions(
@@ -153,7 +160,17 @@ final case class Options(
     content: Option[String],
     mode: Option[String],
     text: Option[TextSize],
-    reduceOptions: Option[ReduceOptions]
+    reduceOptions: Option[ReduceOptions],
+    // table
+    showHeader: Option[Boolean],
+    footer: Option[FooterOptions]
+)
+
+final case class FooterOptions(
+    enablePagination: Option[Boolean],
+    fields: Option[String],
+    reducer: Option[List[String]],
+    show: Option[Boolean]
 )
 
 final case class Panel(
@@ -182,7 +199,7 @@ final case class Requires(
 )
 
 final case class Dashboard(
-    __inputs: List[Inputs],
+    __inputs: Option[List[Inputs]],
     // __elements: Any,
     // __requires: List[Requires],
     // annotations: Annotations,
